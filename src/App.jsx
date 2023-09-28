@@ -6,22 +6,28 @@ function App() {
   const [result, setResult] = useState([]);
   const [message, setMessage] = useState("");
 
+  //Hanterar search funktionen
   const handleSearch = async () => {
+    //Kollar ifall ordet finns med i Dictionary
     handleMessage();
+    //Skickar med ordet som användaren har angett till APIn för att få tillbaka data att visa för användaren
     const response = await fetch(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
+    //Översätter datan till Json
     const data = await response.json();
     console.log(data);
-
+    //Om vi får error meddelandet från APIn, då ska vi ändra vår setMessage state
     if (data.message) {
       setMessage(data.message);
-    } else {
+    }
+    //Annars mata in datan till Result staten, vilket sedan används för att visa datan för användaren
+    else {
       setResult(data);
       setMessage("");
     }
   };
-
+  //Kollar ifall word får existerar
   const handleMessage = () => {
     if (!word) {
       setMessage(
@@ -32,17 +38,22 @@ function App() {
 
   return (
     <div>
+      {/* Skapar en search container där användaren gör sina sökningar */}
       <div className="search-container">
         <input
           type="text"
           value={word}
           onChange={(e) => setWord(e.target.value)}
         />
+        {/* När användaren klickar på knappen så körs handleSearch funktionen, vilket tar ordet som använadren har angett och skickar det till dictionary API */}
         <button onClick={handleSearch}>Search</button>
       </div>
 
       <div className="cards-container">
+        {/* Här visar vi vårt error meddelande som vi får från APIn */}
         <p>{message}</p>
+
+        {/* Vi mappar genom reslutatet och visar upp datan för användaren ifall ordet matchar med dictionary API */}
         {result.map((result, index) => (
           <div key={index} className="card">
             <h2>Word: </h2>

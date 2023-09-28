@@ -15,15 +15,19 @@ describe("App", () => {
   });
 
   test('Should render data when the user searches "food"', async () => {
+    // Vi renderar appen
     render(<App />);
+    // Vi skapar en userEvent för härma riktiga användare beteende.
     const user = userEvent.setup();
-
+    // Vi identiferar vår input field
     const input = screen.getByRole("textbox");
+    // Vi gör så att användaren skriver in "food" i input fältet
     await user.type(input, "food");
-
+    // Vi klickar på knappen och genomför vår sökning
     const button = screen.getByRole("button");
     await user.click(button);
 
+    // Vi speciferar vad för reslutat ska visas på skärmen ifall en matchning sker
     expect(await screen.findByText("food")).toBeInTheDocument();
     expect(await screen.findByText("Part Of Speech:")).toBeInTheDocument();
     expect(await screen.findByText("Example:")).toBeInTheDocument();
