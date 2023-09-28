@@ -40,4 +40,30 @@ describe('App', () => {
 
         expect(screen.getByText("Sorry pal, we couldn't find definitions for the word you were looking for.")).toBeInTheDocument();
     }
+
+    test('Should render error message when no value is in input search'), async () => {
+        render(<App />)
+
+        const input = screen.getByRole('textbox');
+        input.value = 'dasdasd';
+      
+        const button = screen.getByRole('button');
+        button.click();
+
+        expect(screen.getByText("Sorry pal, we couldn't find definitions for the word you were looking for.")).toBeInTheDocument();
+    }
+
+    test('Should render audio playlist'), async () => {
+        render(<App />)
+
+        const user = userEvent.setup()
+
+        const input = screen.getByRole('textbox');
+        await user.type(input, "house")
+      
+        const button = screen.getByRole('button');
+        await user.click(button)
+
+        expect(await screen.findByText('audio')).toBeInTheDocument();
+    }
 });
