@@ -14,133 +14,106 @@ describe("App", () => {
     expect(button).toBeInTheDocument();
   });
 
-  test('Should render data when the user searches "house"'),
-    async () => {
-      render(<App />);
-      const user = userEvent.setup();
+  test('Should render data when the user searches "food"', async () => {
+    render(<App />);
+    const user = userEvent.setup();
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, "house");
+    const input = screen.getByRole("textbox");
+    await user.type(input, "food");
 
-      const button = screen.getByRole("button");
-      await user.click(button);
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      expect(await screen.findByText("house")).toBeInTheDocument();
-      expect(await screen.findByText("example")).toBeInTheDocument();
-      expect(await screen.findByText("definition")).toBeInTheDocument();
-    };
+    expect(await screen.findByText("food")).toBeInTheDocument();
+    expect(await screen.findByText("Part Of Speech:")).toBeInTheDocument();
+    expect(await screen.findByText("Example:")).toBeInTheDocument();
+  });
 
-  test("Should render error message when no value is in input search"),
-    async () => {
-      render(<App />);
+  test("Should render error message when no value is in input search", async () => {
+    render(<App />);
 
-      const user = userEvent.setup();
+    const user = userEvent.setup();
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, " ");
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      const button = screen.getByRole("button");
-      await user.click(button);
+    expect(
+      await screen.getByText(
+        "Sorry pal, we couldn't find definitions for the word you were looking for."
+      )
+    ).toBeInTheDocument();
+  });
 
-      expect(
-        await screen.findByText(
-          "Sorry pal, we couldn't find definitions for the word you were looking for."
-        )
-      ).toBeInTheDocument();
-    };
+  test("Should render error message when the word is not found in the dictionary", async () => {
+    render(<App />);
 
-  test(
-    "Should render error message when the word is not found in the dictionary"
-  ),
-    async () => {
-      render(<App />);
+    const user = userEvent.setup();
 
-      const user = userEvent.setup();
+    const input = screen.getByRole("textbox");
+    await user.type(input, "adsasdsas");
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, "adsasdsas");
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      const button = screen.getByRole("button");
-      await user.click(button);
+    expect(
+      await screen.findByText(
+        "Sorry pal, we couldn't find definitions for the word you were looking for."
+      )
+    ).toBeInTheDocument();
+  });
 
-      expect(
-        await screen.findByText(
-          "Sorry pal, we couldn't find definitions for the word you were looking for."
-        )
-      ).toBeInTheDocument();
-    };
+  test("Should render audio playlist", async () => {
+    render(<App />);
 
-  test("Should render audio playlist"),
-    async () => {
-      render(<App />);
+    const user = userEvent.setup();
 
-      const user = userEvent.setup();
+    const input = screen.getByRole("textbox");
+    await user.type(input, "food");
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, "house");
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      const button = screen.getByRole("button");
-      await user.click(button);
+    expect(await screen.findByTestId("audio")).toBeInTheDocument();
+  });
 
-      expect(await screen.findByText("audio")).toBeInTheDocument();
-    };
+  test("Should render synonyms of the word", async () => {
+    render(<App />);
 
-  test("Should render the words examples"),
-    async () => {
-      render(<App />);
+    const user = userEvent.setup();
 
-      const user = userEvent.setup();
+    const input = screen.getByRole("textbox");
+    await user.type(input, "Food");
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, "house");
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      const button = screen.getByRole("button");
-      await user.click(button);
+    expect(await screen.findByText("Synonym:")).toBeInTheDocument();
+  });
 
-      expect(await screen.findByText("example: ")).toBeInTheDocument();
-    };
+  test("Should render words phonetic", async () => {
+    render(<App />);
 
-  test("Should render synonyms of the word"),
-    async () => {
-      render(<App />);
+    const user = userEvent.setup();
 
-      const user = userEvent.setup();
+    const input = screen.getByRole("textbox");
+    await user.type(input, "Food");
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, "house");
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      const button = screen.getByRole("button");
-      await user.click(button);
+    expect(await screen.findByText("Phonetic:")).toBeInTheDocument();
+  });
 
-      expect(await screen.findByText("Synonym: ")).toBeInTheDocument();
-    };
+  test("Should render words phonetic text", async () => {
+    render(<App />);
+    const user = userEvent.setup();
 
-  test("Should render words phonetic"),
-    async () => {
-      render(<App />);
+    const input = screen.getByRole("textbox");
+    await user.type(input, "food");
 
-      const user = userEvent.setup();
+    const button = screen.getByRole("button");
+    await user.click(button);
 
-      const input = screen.getByRole("textbox");
-      await user.type(input, "house");
-
-      const button = screen.getByRole("button");
-      await user.click(button);
-
-      expect(await screen.findByText("Phonetic: ")).toBeInTheDocument();
-    };
-
-  test("Should render words phonetic text"),
-    async () => {
-      render(<App />);
-      const user = userEvent.setup();
-
-      const input = screen.getByRole("textbox");
-      await user.type(input, "house");
-
-      const button = screen.getByRole("button");
-      await user.click(button);
-
-      expect(await screen.findByText("Phoetic text:")).toBeInTheDocument();
-    };
+    expect(await screen.findByText("Phonetic Text:")).toBeInTheDocument();
+  });
 });

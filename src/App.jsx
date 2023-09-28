@@ -55,7 +55,11 @@ function App() {
               <div key={index}>
                 <p>{phonetic.text}</p>
                 {phonetic.audio && (
-                  <audio controls src={phonetic.audio}></audio>
+                  <audio
+                    data-testid="audio"
+                    controls
+                    src={phonetic.audio}
+                  ></audio>
                 )}
               </div>
             ))}
